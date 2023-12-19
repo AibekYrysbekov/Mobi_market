@@ -1,0 +1,17 @@
+version: "3.11"
+services:
+
+  web:
+    container_name: auth_backend
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/backend_neo
+    env_file:
+      - .env

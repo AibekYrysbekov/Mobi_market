@@ -1,3 +1,6 @@
 # created by virtualenv automatically
-.venv
-
+.venv/
+.env/
+.idea/
+db.sqlite3
+.gitignore/
