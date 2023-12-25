@@ -9,9 +9,9 @@ from config import settings
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="This is API for future NeoCaffee CRM systems",
+        title="Mobi Market API",
         default_version="v1",
-        description="Please enjoy using this API end keep calm )) with love your teammates Mirbek and Asel",
+        description="API documentation",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="contact@snippets.local"),
         license=openapi.License(name="BSD License"),
