@@ -96,3 +96,27 @@ class LogoutSerializer(serializers.Serializer):
 
         except TokenError:
             self.fail('bad_token')
+
+
+class CodeSendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['phone_number']
+
+    def update(self, instance, validated_data):
+        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
+        instance.save()
+        return instance
+
+
+class CodeCheckSerializer(serializers.Serializer):
+    verification_code = serializers.CharField(max_length=6)
+
+    class Meta:
+        model = User
+        fields = ['verification_code']
+        read_only_fields = ['phone_number']
+
+
+
+
