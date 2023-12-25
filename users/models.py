@@ -26,7 +26,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(max_length=255, unique=True)
-    avatar = models.ImageField(upload_to='Mobi_market/media/user_image', default='product_image/avatar.png',
+    avatar = models.ImageField(upload_to='Mobi_market/media/user_image', default='user_image/avatar.png',
                                null=True, blank=True)
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
