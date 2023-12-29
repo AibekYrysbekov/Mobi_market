@@ -1,12 +1,12 @@
 import random
-from django.db import transaction
 from rest_framework import status, exceptions, generics
 from rest_framework.generics import GenericAPIView
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from config import settings
 from .models import User
-from .serializers import ProfileRegistrationSerializer, LoginSerializer, RegistrationSerializer, ProfileSerializer, \
+from .serializers import ProfileRegistrationSerializer, LoginSerializer, RegistrationSerializer, \
     LogoutSerializer, CodeCheckSerializer, CodeSendSerializer
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioException
@@ -38,24 +38,16 @@ class ProfileUpdateView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ProfileRegistrationSerializer
     queryset = User.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
 
-    def put(self, request):
+    def put(self, request, *args, **kwargs):
         user = request.user
-
         serializer = self.serializer_class(user, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProfileView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = ProfileSerializer
-    queryset = User.objects.all()
-
-    def get_object(self):
-        return self.request.user
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CodeSendView(GenericAPIView):
@@ -119,3 +111,5 @@ class LogoutView(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        serializer.save()
+        return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
