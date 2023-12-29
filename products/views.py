@@ -2,19 +2,9 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import generics
 from .models import Product
 from .serializers import ProductSerializer
 from .utils import get_like, delete_like, get_like_count
-
-
-class ProductApiView(generics.ListAPIView):
-    """Представление для получения списка доступных товаров без авторизации.
-
-    Это представление позволяет только чтение (GET) и требует не аутентификации пользователя.
-    """
-    queryset = Product.objects.filter(available=True)
-    serializer_class = ProductSerializer
 
 
 class ProductCreateApiView(viewsets.ModelViewSet):
