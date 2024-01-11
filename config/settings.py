@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
     "www.aibek-backender.org.kg",
     "aibek-backender.org.kg",
     "165.227.170.125",
+    'google.com',
 ]
 
 
