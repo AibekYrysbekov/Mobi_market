@@ -10,12 +10,7 @@ class Product(models.Model):
     description = models.TextField(verbose_name='Описание', max_length=500)
     short_description = models.CharField(verbose_name='Короткое описание', max_length=255)
     available = models.BooleanField(verbose_name="В наличии?", default=True)
-    photo = models.ImageField(
-        verbose_name='Фото товара',
-        upload_to='Mobi_market/media/product_image',
-        default='product_image/product.png')
     price = models.DecimalField(verbose_name='Цена', max_digits=7, decimal_places=2)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Продукты'
@@ -23,6 +18,16 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ProductPhoto(models.Model):
+    product = models.ForeignKey(Product, related_name='photos', on_delete=models.CASCADE)
+    photo = models.ImageField(verbose_name='Фото товара', upload_to='Mobi_market/media/product_image',
+                              default='product_image/product.png', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Фото продукта'
+        verbose_name_plural = 'Фотографии продукта'
 
 
 class LikeProduct(models.Model):

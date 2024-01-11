@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import Product
+from .models import Product, ProductPhoto
 from .serializers import ProductSerializer
 from .utils import get_like, delete_like, get_like_count
 
@@ -16,6 +16,19 @@ class ProductCreateApiView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        photos_data = request.data.pop('photos', [])
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            product = serializer.save(created_by=request.user)
+
+            for photo_data in photos_data:
+                ProductPhoto.objects.create(product=product, photo=photo_data)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
